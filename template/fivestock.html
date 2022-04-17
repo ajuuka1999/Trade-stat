@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #DDD;
+}
+
+tr:hover {background-color: #D6EEEE;}
+</style>
+</head>
+<body>
+
+<h2>Hoverable Table</h2>
+<p>Move the mouse over the table rows to see the effect.</p>
+
+<table>
+  <tr>
+    <th>Company</th>
+    <th>Date</th>
+    <th>Open</th>
+    <th>High</th>
+    <th>Low</th>
+    <th>Close</th>
+    <th>Volume</th>
+  </tr>
+  <tr>
+    <td>{{Company1}}</td>
+    <td>{{Date1}}</td>
+    <td>{{Open1}}</td>
+    <td>{{High1}}</td>
+    <td>{{Low1}}</td>
+    <td>{{Close1}}</td>
+    <td>{{Volume1}}</td>
+  </tr>
+  <tr>
+    <td>{{Company2}}</td>
+    <td>{{Date2}}</td>
+    <td>{{Open2}}</td>
+    <td>{{High2}}</td>
+    <td>{{Low2}}</td>
+    <td>{{Close2}}</td>
+    <td>{{Volume2}}</td>
+  </tr>
+  <tr>
+    <td>{{Company3}}</td>
+    <td>{{Date3}}</td>
+    <td>{{Open3}}</td>
+    <td>{{High3}}</td>
+    <td>{{Low3}}</td>
+    <td>{{Close3}}</td>
+    <td>{{Volume3}}</td>
+  </tr>
+  <tr>
+    <td>{{Company4}}</td>
+    <td>{{Date4}}</td>
+    <td>{{Open4}}</td>
+    <td>{{High4}}</td>
+    <td>{{Low4}}</td>
+    <td>{{Close4}}</td>
+    <td>{{Volume4}}</td>
+  </tr>
+  <tr>
+    <td>{{Company5}}</td>
+    <td>{{Date5}}</td>
+    <td>{{Open5}}</td>
+    <td>{{High5}}</td>
+    <td>{{Low5}}</td>
+    <td>{{Close5}}</td>
+    <td>{{Volume5}}</td>
+  </tr>
+</table>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company1}} name="remove" value="remove {{Company1}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company2}} name="remove" value="remove {{Company2}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company3}} name="remove" value="remove {{Company3}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company4}} name="remove" value="remove {{Company4}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company5}} name="remove" value="remove {{Company5}}">
+</form>
+<form action="/refresh" method="POST" >
+  <input type="submit" name="refresh" value="refresh">
+</form>
+<form action="/mainpage" method="POST" >
+  <input type="submit" name="registernew" value="registernew">
+</form>
+</body>
+</html>

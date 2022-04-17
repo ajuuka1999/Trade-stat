@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trade Stat</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+      body {
+      font: 20px Montserrat, sans-serif;
+      line-height: 1.8;
+      color: #f5f6f7;
+    }
+    p {font-size: 16px;}
+    .margin {margin-bottom: 45px;}
+    .bg-1 {
+      background-color: #1abc9c; /* Green */
+      color: #ffffff;
+    }
+    .bg-2 {
+      background-color: #474e5d; /* Dark Blue */
+      color: #ffffff;
+    }
+    .bg-3 {
+      background-color: #ffffff; /* White */
+      color: #555555;
+    }
+    .bg-4 {
+      background-color: #2f2f2f; /* Black Gray */
+      color: #fff;
+    }
+    .container-fluid {
+      padding-top: 70px;
+      padding-bottom: 70px;
+    }
+    .navbar {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border: 0;
+      border-radius: 0;
+      margin-bottom: 0;
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+    .navbar-nav  li a:hover {
+      color: #1abc9c !important;
+    }
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #DDD;
+    } 
+
+    tr:hover {background-color: #D6EEEE;}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="mainpage">TRADE STAT</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="services">SERVICES</a></li>
+          <li><a href="sp_list">S&P LIST</a></li>
+          <li><a href="account">ACCOUNT</a></li>
+          <li><a href="about">ABOUT</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class="container-fluid bg-1">
+    <h2>Read Stock Table</h2>
+    <p>The .table-condensed class makes a table more compact by cutting cell padding in half:</p>  
+
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Date</th>
+        <th>Open</th>
+        <th>High</th>
+        <th>Low</th>
+        <th>Close</th>
+        <th>Volume</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{Company1}}</td>
+        <td>{{Date1}}</td>
+        <td>{{Open1}}</td>
+        <td>{{High1}}</td>
+        <td>{{Low1}}</td>
+        <td>{{Close1}}</td>
+        <td>{{Volume1}}</td>
+      </tr>
+      <tr>
+        <td>{{Company2}}</td>
+        <td>{{Date2}}</td>
+        <td>{{Open2}}</td>
+        <td>{{High2}}</td>
+        <td>{{Low2}}</td>
+        <td>{{Close2}}</td>
+        <td>{{Volume2}}</td>
+      </tr>
+      <tr>
+        <td>{{Company3}}</td>
+        <td>{{Date3}}</td>
+        <td>{{Open3}}</td>
+        <td>{{High3}}</td>
+        <td>{{Low3}}</td>
+        <td>{{Close3}}</td>
+        <td>{{Volume3}}</td>
+      </tr>
+      <tr>
+        <td>{{Company4}}</td>
+        <td>{{Date4}}</td>
+        <td>{{Open4}}</td>
+        <td>{{High4}}</td>
+        <td>{{Low4}}</td>
+        <td>{{Close4}}</td>
+        <td>{{Volume4}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="container-fluid bg-2 text-center">
+  <h3 class="margin">Customize your list</h3>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+  <form class="form-container" action="/add_code" method="POST">
+    <div class="form-group">
+    </div>
+  </form>
+  <a href="#" class="btn btn-default btn-lg">
+    <span class="glyphicon glyphicon-search"></span> Search
+  </a>
+</div>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company1}} name="remove" value="remove {{Company1}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company2}} name="remove" value="remove {{Company2}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company3}} name="remove" value="remove {{Company3}}">
+</form>
+<form action="/remove" method="POST" >
+  <input type="submit" id={{Company4}} name="remove" value="remove {{Company4}}">
+</form>
+<form action="/refresh" method="POST" >
+  <input type="submit" name="refresh" value="refresh">
+</form>
+<form action="/mainpage" method="POST" >
+  <input type="submit" name="registernew" value="registernew">
+</form>
+</body>
+</html>

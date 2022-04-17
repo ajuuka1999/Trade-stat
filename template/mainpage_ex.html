@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+          font: 20px Montserrat, sans-serif;
+          line-height: 1.8;
+          color: #f5f6f7;
+        }
+        p {font-size: 16px;}
+        .margin {margin-bottom: 45px;}
+        .bg-1 {
+          background-color: #1abc9c; /* Green */
+          color: #ffffff;
+        }
+        .bg-2 {
+          background-color: #474e5d; /* Dark Blue */
+          color: #ffffff;
+        }
+        .bg-3 {
+          background-color: #ffffff; /* White */
+          color: #555555;
+        }
+        .bg-4 {
+          background-color: #2f2f2f; /* Black Gray */
+          color: #fff;
+        }
+        .container-fluid {
+          padding-top: 70px;
+          padding-bottom: 70px;
+        }
+        .navbar {
+          padding-top: 15px;
+          padding-bottom: 15px;
+          border: 0;
+          border-radius: 0;
+          margin-bottom: 0;
+          font-size: 12px;
+          letter-spacing: 5px;
+        }
+        .navbar-nav  li a:hover {
+          color: #1abc9c !important;
+        }
+        </style>
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index">TRADE STAT</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="market">MARKET</a></li>
+          <li><a href="sp_list">S&P LIST</a></li>
+          <li><a href="account">ACCOUNT</a></li>
+          <li><a href="logout">LOGOUT</a></li>
+          <li><a href="about">ABOUT</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+  var dataPoints = [], currentDate = new Date(), rangeChangedTriggered = false;
+  var stockChart = new CanvasJS.StockChart("chartContainer",{
+    theme: "dark2", //"light2", "dark1", "dark2"
+    title:{
+      text:"Dynamic StockChart"
+    },
+    rangeChanged: function(e) {
+        rangeChangedTriggered = true;
+    },
+    charts: [{
+      axisX: {
+        crosshair: {
+          enabled: true,
+          valueFormatString: "MMM DD, YYYY HH:mm:ss"
+        }
+      },
+      axisY: {
+        title: "Stockviews Per Second"
+      },
+      toolTip: {
+        shared: true
+      },
+      data: [{
+        type: "line",
+        name: "Pageviews",
+        xValueFormatString: "MMM DD, YYYY HH:mm:ss",
+        xValueType: "dateTime",
+        dataPoints : dataPoints
+      }]
+    }],
+    navigator: {
+      slider: {
+        minimum: new Date(currentDate.getTime() - (90 * 1000))
+      },
+      axisX: {
+        labelFontColor: "white"
+      }
+    },
+    rangeSelector: {
+      enabled: false
+    }
+  });
+  var dataCount = 700, ystart = 50, interval = 1000, xstart = (currentDate.getTime() - (700 * 1000));
+  updateChart(xstart, ystart, dataCount, interval);
+  function updateChart(xstart, ystart, length, interval) {
+    var xVal = xstart, yVal = ystart;
+    for(var i = 0; i < length; i++) {
+      yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
+      yVal = Math.min(Math.max(yVal, 5), 90);
+      dataPoints.push({x: xVal,y: yVal});
+      xVal += interval;
+    }
+    if(!rangeChangedTriggered) {
+        stockChart.options.navigator.slider.minimum = new Date(xVal - (90 * 1000)) ;
+    }
+    xstart = xVal;
+    dataCount = 1;
+    ystart = yVal;
+    stockChart.render();
+    setTimeout(function() { updateChart(xstart, ystart, dataCount, interval); }, 1000);
+  }
+}
+</script>
+
+<!-- First Container -->
+<div class="container-fluid bg-1 text-center">
+    <div class="media">
+      <div class="media-body">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+  
+            <li>{{ messages[-1] }}</li>
+          </ul>
+        {% endif %}
+      {% endwith %}
+      <form class="form-container" action="/refresh" method="POST" >
+          <div>
+            <button type="submit" name="refresh" class="btn btn-default">Your Lists</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+
+</head>
+<body>
+<div id="chartContainer" style="height: 450px; width: 100%;"></div>
+</body>
+</html>

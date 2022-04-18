@@ -1,11 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import code
 import email
-#from crypt import methods
 from flask import Flask,redirect,url_for,render_template,request,flash,session,send_file
 import sqlite3
-import bcrypt
-from fpdf import FPDF
 from urllib.parse import urlparse
 import os
 import sys
@@ -13,19 +10,22 @@ import time
 import yagmail
 from searchapi import *
 
-from concurrent.futures import ThreadPoolExecutor
+#from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__,template_folder='template')
 app.secret_key = 'trade statistics'
 Codes =[]
 Codeset =set()
 dbconnectemail = str()
+username = str()
+setalert = 0
+alertcode = ""
 
-@app.route("/mainpage")
+@app.route("/mainpage", methods=["refresh=GET","GET","PUT"])
 def mainpage():
     return render_template("mainpage_ex.html")
 
-@app.route("/refresh", methods=["POST","GET"])
+@app.route("/refresh", methods=["POST","GET", "registernew=registernewPOST","refresh=GET","refresh=POST"])
 def refresh():
 
     print("refresh")
@@ -33,7 +33,10 @@ def refresh():
     global Codes
     global Codeset
     global dbconnectemail
+    global username
     print("dbconnectemail",dbconnectemail)
+    print("username", username)
+
     try:
         con = sqlite3.connect("trade.db")
         cur = con.cursor()
@@ -44,21 +47,27 @@ def refresh():
         return "DB not connected"
 
     codesindb = profile[0][5]
-    dbcodes = codesindb.split("+")
-    Codeset.update(dbcodes)
-    print("dbcodes",dbcodes)
-    print("Codeset",Codeset)
+    print(codesindb)
+
+    if codesindb != None:
+
+        dbcodes = codesindb.split("+")
+        Codeset.update(dbcodes)
+        print("dbcodes",dbcodes)
+        print("Codeset",Codeset)
+    else:
+        Codeset=[]
 
     printstock =[]
 
     if len(Codeset)==0:
         return redirect(url_for("mainpage"))
 
-
     for code in Codeset:
 
         if code == "NONE":
-            return redirect(url_for("mainpage"))
+            flash('Hello ' + username)
+            return render_template("mainpage_ex.html")
 
         STCK = search(code)
         if STCK == False:
@@ -77,7 +86,7 @@ def refresh():
         Company2=printstock[7],Date2=printstock[8],Open2=printstock[9],High2=printstock[10],Low2=printstock[11],Close2=printstock[12],Volume2=printstock[13],Company3=printstock[14],Date3=printstock[15],
         Open3=printstock[16],High3=printstock[17],Low3=printstock[18],Close3=printstock[19],Volume3=printstock[20])
     if len(Codeset)==4:
-        return render_template("fourstock.html",Company1=printstock[0],Date1=printstock[1],Open1=printstock[2],High1=printstock[3],Low1=printstock[4],Close1=printstock[5],Volume1=printstock[6],
+        return render_template("fourstcok.html",Company1=printstock[0],Date1=printstock[1],Open1=printstock[2],High1=printstock[3],Low1=printstock[4],Close1=printstock[5],Volume1=printstock[6],
         Company2=printstock[7],Date2=printstock[8],Open2=printstock[9],High2=printstock[10],Low2=printstock[11],Close2=printstock[12],Volume2=printstock[13],Company3=printstock[14],Date3=printstock[15],
         Open3=printstock[16],High3=printstock[17],Low3=printstock[18],Close3=printstock[19],Volume3=printstock[20],Company4=printstock[21],Date4=printstock[22],Open4=printstock[23],High4=printstock[24],
         Low4=printstock[25],Close4=printstock[26],Volume4=printstock[27])
@@ -94,11 +103,94 @@ def refresh():
         return "printstock"
 
 
+
+@app.route("/registernew", methods=["POST","GET"])
+def registernew():
+
+    print("registernew")
+
+    global Codes
+    global Codeset
+    global dbconnectemail
+    global username
+
+    print("dbconnectemail",dbconnectemail)
+    time.sleep(1)
+    flash('Hello ' + username)
+    return render_template("mainpage_ex.html")
+
+def startalert():
+    global alertcode
+    global setalert
+    print(alertcode,setalert)
+
+
+@app.route("/setalerts", methods=["POST","GET","registernew=registernewPOST"])
+def registeralerts():
+
+    print("registeralerts")
+
+    global Codes
+    global Codeset
+    global dbconnectemail
+    global username
+    global alertcode
+    global setalert
+    sender_email = 'invensistechnologiesuk@gmail.com'
+    sender_password = 'ajmal@99'
+    receiver_email = dbconnectemail
+    yag = yagmail.SMTP(user=sender_email, password=sender_password)
+
+    print("dbconnectemail",dbconnectemail)
+    print(request.form)
+    code_comp = request.form["code_comp"]
+    value = request.form["value"]
+    print(code_comp,value)
+    print(Codeset)
+    time.sleep(1)
+    try:
+        con = sqlite3.connect("trade.db")
+        cur = con.cursor()
+        cur.execute("SELECT * FROM user WHERE email = '" + dbconnectemail + "'")
+        profile = cur.fetchall()
+    except:
+        flash("DB not connected")
+        return "DB not connected"
+
+    codesindb = profile[0][5]
+    dbcodes = codesindb.split("+")
+    Codeset.update(dbcodes)
+    print("dbcodes",dbcodes)
+    print("Codeset",Codeset)
+    if code_comp in Codeset:
+        print("code is registered")
+        alertcode = code_comp.upper()
+        contents = ['Alert is started for {}.Your target is $ {}'.format(alertcode,value)]
+        Subject = "Trade Alert"
+        setalert = 1
+        yag.send(to=receiver_email, subject=Subject, contents=contents)
+        STCK = search(code_comp.upper())
+        if float(STCK[5]) >= int(value):
+            contents = ['Your targte for {} is reached'.format(alertcode)]
+            yag.send(to=receiver_email, subject=Subject, contents=contents)
+            setalert = 0
+
+
+
+
+
+    flash('Hello ' + username)
+    return render_template("mainpage_ex.html")
+
+
+
 @app.route("/sp_list")
 def sp_list():
     return render_template("tables.html")
 
-@app.route("/add_code", methods=["POST", "GET"])
+
+
+@app.route("/add_code", methods=["POST", "GET","refresh=POST","registernew=registernewPOST"])
 def add_code():
     print("in add_code")
     global Codes
@@ -114,49 +206,59 @@ def add_code():
         flash("DB not connected")
         return "DB not connected"
 
+    print(profile)
     codesindb = profile[0][5]
-    if "NONE" in codesindb:
+
+    if codesindb == 'NONE':
+        print("test")
         Codeset = set()
     else:
         dbcodes = codesindb.split("+")
         Codeset.update(Codes)
 
-
     print("Codeset",Codeset)
 
-    if request.method == "POST":
-        email = request.form["email"]
-        code_comp = request.form["code_comp"]
-        Codes = code_comp.split(",")
-        if len(Codeset) < 5:
-            Codeset.update(Codes)
-            code_comp_db = str()
-            for x in Codeset:
-                goodcode = validatecode(x)
-                if goodcode is True:
-                    code_comp_db = x+"+"+ code_comp_db
-                else:
-                    print("{} is not a valide code".format(x))
-
-            code_comp_db =code_comp_db.strip("+")
-            print("code_comp_db", code_comp_db)
-            cur.execute("UPDATE user SET comp_code = (?) WHERE email = (?)", (code_comp_db, dbconnectemail))
-            con.commit()
-            cur.execute("SELECT * FROM user WHERE email = '"+dbconnectemail+"'")
-            updatecheck=cur.fetchall()
-            if code_comp_db in updatecheck[0][5]:
-                return render_template("mainpage.html")
+    code_comp = request.form["code_comp"]
+    print("code_comp",code_comp)
+    Codes = code_comp.split(",")
+    if len(Codeset) < 5:
+        Codeset.update(Codes)
+        code_comp_db = str()
+        for x in Codeset:
+            goodcode = validatecode(x)
+            if goodcode is True:
+                code_comp_db = x+"+"+ code_comp_db
             else:
-                return "Update Failed"
+                print("{} is not a valide code".format(x))
+                Codeset= Codeset.remove(x)
+
+
+        code_comp_db =code_comp_db.strip("+")
+        print("code_comp_db", code_comp_db)
+        cur.execute("UPDATE user SET comp_code = (?) WHERE email = (?)", (code_comp_db, dbconnectemail))
+        con.commit()
+        cur.execute("SELECT * FROM user WHERE email = '"+dbconnectemail+"'")
+        updatecheck=cur.fetchall()
+        if code_comp_db in updatecheck[0][5]:
+            return redirect(url_for("mainpage"))
+        else:
+            return "Update Failed"
+    else:
+        return redirect(url_for("mainpage"))
+
+
 
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
     return render_template ("logout.html")
 
 
+#Sign In
+
 @app.route("/signin", methods=["POST", "GET"])
 def signin():
     global dbconnectemail
+    global username
     if request.method == "POST":
         email = request.form["email"]
         password = request.form["password"]
@@ -175,6 +277,7 @@ def signin():
                 session["email"] = email
                 dbconnectemail = email
                 session["username"] = i[1]
+                username = i[1]
                 print ("verification success")
                 flash('Hello '+session["username"])
 
@@ -184,10 +287,14 @@ def signin():
                 return redirect(url_for("signin"))
     return render_template("login.html")
 
+#Sign In End
+
+
 @app.route("/remove", methods=["POST","GET"])
 def remove():
     print("im in remove")
     global Codeset
+    print(request.form)
     Code = request.form["remove"]
     print("Code before",Code)
     print("Codeset before",Codeset)
@@ -220,12 +327,12 @@ def remove():
     cur.execute("SELECT * FROM user WHERE email = '"+dbconnectemail+"'")
     updatecheck=cur.fetchall()
     if code_comp_db in updatecheck[0][5]:
-        return render_template("mainpage_ex.html")
+        return redirect(url_for("mainpage"))
     else:
         return "Update Failed"
 
 
-
+#Registering the account
 
 @app.route("/register", methods=["POST", "GET"])
 def register():
@@ -238,7 +345,7 @@ def register():
         try:
             con=  sqlite3.connect("trade.db")
             cur = con.cursor()
-            cur.execute("INSERT OR REPLACE into user (name, email, country, password) values (?, ?, ?, ?)", (name, email, country, hashed))
+            cur.execute("INSERT OR REPLACE into user (name, email, country, password, comp_code) values (?, ?, ?, ?, ?)", (name, email, country, hashed, 'NONE'))
             print ("inserting into table")
             con.commit()
             return redirect(url_for("signin"))
@@ -247,6 +354,10 @@ def register():
             flash("Sorry failed")
             return redirect(url_for("register"))
     return render_template("register.html")
+
+#Registering Ending
+
+
 
 @app.route("/market")
 def market():
@@ -257,10 +368,15 @@ def index():
     #return index page
     return render_template("index.html")
 
+@app.route("/home")
+def home():
+    return render_template("index.html")
 @app.route("/about")
 def about():
     #return about page
     return render_template("about.html")
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -17,19 +17,19 @@
   }
   p {font-size: 16px;}
   .margin {margin-bottom: 45px;}
-  .bg-1 { 
+  .bg-1 {
     background-color: #1abc9c; /* Green */
     color: #ffffff;
   }
-  .bg-2 { 
+  .bg-2 {
     background-color: #474e5d; /* Dark Blue */
     color: #ffffff;
   }
-  .bg-3 { 
+  .bg-3 {
     background-color: #ffffff; /* White */
     color: #555555;
   }
-  .bg-4 { 
+  .bg-4 {
     background-color: #2f2f2f; /* Black Gray */
     color: #fff;
   }
@@ -60,7 +60,7 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
+        <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="index">TRADE STAT</a>
     </div>
@@ -69,6 +69,7 @@
         <li><a href="services">SERVICES</a></li>
         <li><a href="sp_list">S&P LIST</a></li>
         <li><a href="account">ACCOUNT</a></li>
+        <li><a href="logout">LOGOUT</a></li>
         <li><a href="about">ABOUT</a></li>
       </ul>
     </div>
@@ -87,16 +88,29 @@
 <div class="jumbotron text-center bg-2">
      {% with messages = get_flashed_messages() %}
       {% if messages %}
-        
+
           <li>{{ messages[-1] }}</li>
         </ul>
       {% endif %}
     {% endwith %}
   </div>
 <!-- Second Container -->
+</form>
+<form action="/refresh" method="POST" >
+  <input type="submit" name="refresh" value="Your Companies">
+</form>
 <div class="container-fluid bg-2 text-center">
-  <h3 class="margin">What Am I?</h3>
+  <h3 class="margin">Customize your list</h3>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+  <form class="form-container" action="/add_code" method="POST">
+    <div class="form-group">
+      <input type="email" class="form-control" size="50" id="email" placeholder="Email Address" required width="150" name="email">
+      <input type="code_comp" class="form-control" size="50" id="code_comp" placeholder="List of Company Code (Max 5)" required width="150" name="code_comp">
+      <div>
+        <button type="submit" class="btn btn-default">SUBMIT</button>
+      </div>
+    </div>
+  </form>
   <a href="#" class="btn btn-default btn-lg">
     <span class="glyphicon glyphicon-search"></span> Search
   </a>

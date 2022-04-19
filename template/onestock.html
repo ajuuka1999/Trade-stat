@@ -74,7 +74,6 @@
 <div class="container-fluid bg-1">
     <h2>Read Stock Table</h2>
     <p>The .table-condensed class makes a table more compact by cutting cell padding in half:</p>  
-
   <table class="table table-condensed">
     <thead>
       <tr>
@@ -99,6 +98,55 @@
       </tr>
     </tbody>
   </table>
+  <form class="form-container" action="/remove" method="POST" >
+    <div>
+      <button type="submit" class="btn btn-default" id={{Company}} name="remove" value="remove {{Company}}">DELETE 1</button>
+    </div>
+  </form>
+  <form class="form-container" action="/refresh" method="POST" >
+    <div>
+      <button type="submit" class="btn btn-default" name="name" value="refresh">REFRESH PAGE</button>
+    </div>
+  </form>
+  <form class="form-container" action="/registernew" method="POST" >
+    <h4>Register new here:</h4>
+    <div>
+      <button type="submit" class="btn btn-default" name="registernew" value="registernew">REGISTER NEW</button>
+    </div>
+  </form>
+</div>
+<head>
+  <title>Google Charts </title>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    var Val = $Company1;
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Value', 'MSFT'],
+        ['Open',        36.83],
+        ['High',       36.93],
+        ['Low',        36.38],
+        ['Close',       36.79]
+      ]);
+
+      var options = {
+        title: 'Company Stock Values: Latest',
+        curveType: 'function',
+        legend: { position: 'bottom' }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+      chart.draw(data, options);
+    }
+  </script>
+</head>
+<div class="container-fluid bg-2 text-center">
+  <h3 class="margin">LATEST VALUE CHART</h3>
+  <div class="container-fluid text-center" id="curve_chart" style="width: 1000px; height: 600px"></div>
 </div>
 <div class="container-fluid bg-2 text-center">
   <h3 class="margin">Customize your list</h3>
@@ -111,14 +159,5 @@
     <span class="glyphicon glyphicon-search"></span> Search
   </a>
 </div>
-<form action="/remove" method="POST" >
-  <input type="submit" id={{Company}} name="remove" value="remove {{Company}}">
-</form>
-<form action="/refresh" method="POST" >
-  <input type="submit" name="refresh" value="refresh">
-</form>
-<form action="/mainpage" method="POST" >
-  <input type="submit" name="registernew" value="registernew">
-</form>
 </body>
 </html>

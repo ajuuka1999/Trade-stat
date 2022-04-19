@@ -154,6 +154,23 @@ window.onload = function () {
             <button type="submit" name="refresh" class="btn btn-default">Your Lists</button>
           </div>
       </form>
+      <form class="form-container" action="/add_code" method="POST">
+        <div class="form-group">
+          <input type="code_comp" class="form-control" size="50" id="code_comp" placeholder="List of S&P Code (Max 5)" required width="150" name="code_comp">
+          <div>
+            <button type="submit" class="btn btn-default">SUBMIT</button>
+          </div>
+        </div>
+      </form>
+      <form class="form-container" action="/setalerts" method="POST">
+        <div class="form-group">
+          <input type="code_comp" class="form-control" size="5" id="code_comp" placeholder="S&P Code" required width="150" name="code_comp">
+            <input type="code_comp" class="form-control" size="5" id="code_comp" placeholder="Limit in $" required width="150" name="value">
+          <div>
+            <button type="submit" class="btn btn-default">SET ALERT</button>
+          </div>
+        </div>
+      </form>
       </div>
     </div>
   </div>

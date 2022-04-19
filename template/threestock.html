@@ -67,7 +67,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
+          <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="mainpage">TRADE STAT</a>
       </div>
@@ -83,8 +83,7 @@
   </nav>
 <div class="container-fluid bg-1">
     <h2>Read Stock Table</h2>
-    <p>The .table-condensed class makes a table more compact by cutting cell padding in half:</p>  
-
+    <p>The .table-condensed class makes a table more compact by cutting cell padding in half:</p>
   <table class="table table-condensed">
     <thead>
       <tr>
@@ -136,12 +135,14 @@
   </form>
   <form class="form-container" action="/refresh" method="POST" >
     <div>
-      <button type="submit" class="btn btn-default" name="refresh" value="refresh">REFRESH PAGE</button>
+      <button type="submit" class="btn btn-default"  name="name" value="refresh">REFRESH PAGE</button>
     </div>
   </form>
-  <form class="form-container" action="/mainpage" method="POST" >
+   <form class="form-container" action="/registernew" method="POST" >
     <h4>Register new here:</h4>
-    <button class="btn btn-default" type="submit" name="registernew" value="registernew">REGISTER NEW</button>
+    <div>
+      <button type="submit" class="btn btn-default" name="registernew" value="registernew">REGISTER NEW</button>
+    </div>
   </form>
 </div>
 <head>
@@ -154,7 +155,7 @@
     var Val = $Company1;
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
-        ['Value', Val , 'MSFT'],
+        ['Value', 'FB' , 'MSFT'],
         ['Open',  225.97,      36.83],
         ['High',  234.35,      36.93],
         ['Low',  225.86,       36.38],

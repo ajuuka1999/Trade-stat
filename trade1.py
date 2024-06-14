@@ -136,8 +136,8 @@ def registeralerts():
     global username
     global alertcode
     global setalert
-    sender_email = 'invensistechnologiesuk@gmail.com'
-    sender_password = 'ajmal@99'
+    sender_email = 'sampleemail@gmail.com'
+    sender_password = 'password'
     receiver_email = dbconnectemail
     yag = yagmail.SMTP(user=sender_email, password=sender_password)
 
